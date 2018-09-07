@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>My Webpage</title>
+    <title>Photobooth</title>
+    <meta http-equiv="refresh" content="30">
+    <link rel="stylesheet" href="/static/photobooth.css" />
 </head>
 <body>
-    <h1>Photobooth</h1>
-
-    <ul id="photos">
+    <div id="photos">
     {% for item in photos %}
-        <li><img src="{{ item }}" /></li>
+       	<img src="{{ item }}" />
     {% endfor %}
-    </ul>
+    </div>
+
+    <script src="/static/photobooth.js"></script>
 </body>
 </html>
