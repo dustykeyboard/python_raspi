@@ -1,24 +1,50 @@
-import time
-import picamera
+#!/usr/bin/python
 
+import time
+from picamera import PiCamera
+from gpiozero import Button, LED
+from signal import pause
+
+button = Button(2)
+led = LED(17)
 PATH = "/home/pi/cameraroll"
+busy = False
+camera = PiCamera()
+camera.resolution = (1080, 1080)
+
+
+def ready():
+	for i in range(0,3):
+		led.on()
+		time.sleep(0.1)
+		led.off()
+		time.sleep(0.1)
+
 
 def capture():
+	led.on()
+	time.sleep(0.5)
+	# Camera warm-up time and time between shots
 	filename = "{}/{}.jpg".format(PATH, time.strftime('%Y-%m-%d_%H-%M-%S'))
-	print("Capturing: {}".format(filename)
+	print("Capturing: {}".format(filename))
 	camera.capture(filename)
+	time.sleep(0.5)
+	led.off()
 
+
+# Capture 4 photos, 2 seconds apart
 def capture_burst():
-	# Capture 4 photos, 2 seconds apart
-	with picamera.PiCamera() as camera:
-		camera.resolution = (1080, 1080)
-		camera.start_preview()
-
+	global busy
+	if not busy:
+		busy = True
 		for loop in range(0, 4):
-			# Camera warm-up time and time between shots
-			time.sleep(2)
 			capture()
+			time.sleep(1)
+		
+		busy = False
 
 
+button.when_pressed = capture_burst
 if __name__ == '__main__':
-	capture_burst()
+	ready()
+	pause()
