@@ -1,15 +1,18 @@
 #!/usr/bin/python
 
-import os
-from flask import Flask, request, send_from_directory
+from os import listdir
+from os.path import isfile, join
+from flask import Flask, render_template, request, send_from_directory
 
 
 app = Flask(__name__)
+path = "/home/pi/cameraroll"
 
 
 @app.route("/")
 def listPhotos():
-	return "Photobooth", 200
+	photos = [join("cameraroll/", photo) for photo in listdir(path) if isfile(join(path, photo))]
+	return render_template("photobooth.html", photos = photos), 200
 
 
 @app.route("/static/<path:path>")
