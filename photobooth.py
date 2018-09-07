@@ -23,12 +23,10 @@ def ready():
 
 def capture(timestamp, loop):
 	led.on()
-	time.sleep(0.5)
-	# Camera warm-up time and time between shots
+	time.sleep(0.3)
 	filename = "{}/{}_{}.jpg".format(PATH, timestamp, loop)
-	print("Capturing: {}".format(filename))
 	camera.capture(filename)
-	time.sleep(0.5)
+	time.sleep(0.2)
 	led.off()
 
 
@@ -40,12 +38,14 @@ def capture_burst():
 		timestamp = time.strftime('%Y-%m-%d_%H%M%S')
 		for loop in range(0, 4):
 			capture(timestamp, loop)
-			time.sleep(1)
+			time.sleep(2)
 		
 		busy = False
 
 
-button.when_pressed = capture_burst
+
 if __name__ == '__main__':
+	time.sleep(2)
+	button.when_pressed = capture_burst
 	ready()
 	pause()
